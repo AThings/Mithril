@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div></div>
+  <script src="https://unpkg.com/mithril/mithril.js"></script>
+  <script>
+    let root = document.body;
+    var count = 0;
+
+    let domH1 = m('h1', {class: "title"}, 'My first app');
+    let btn = m('button',{
+      onclick:function() {
+        console.log(count);
+        count++
+      }
+    } , count + " clicks");
+
+    let totalDom = m('main', [domH1, btn]);
+
+    let form = {
+      view: function() {
+        return m('div', [
+          m('input', {type: 'text'}, '用户名'),
+          m('input', {type: 'password'}, '密码')
+        ])
+      }
+    };
+    let Hello = {
+      view: function() {
+        return m("button", {
+          onclick: function() {
+            count ++
+          }
+        },
+        count + " clicks")
+      }
+    }
+    //m.mount(root, form); // 激活组件
+    //m.mount(root, Hello);
+    // m.render(root, totalDom); // 挂载到根节点  只渲染一次
+
+    let Splash = {
+      view: function() {
+        return m('a', {
+          href: '#!/hello'
+        }, 'Enter!')
+      }
+    }
+    // m.route(root, '/splash', {
+    //   '/splash': Splash,
+    //   '/hello': Hello
+    // })
+    var increment = function() {
+      m.request({
+        methods: "PUT",
+        url: "//rem-rest-api.herokuapp.com/api/tutorial/1",
+        body: {count: count + 1},
+        withCredentials: true
+      })
+      .then(function(data) {
+        console.log(data);
+        count = parseInt(data.count);
+      })
+    }
+    var add = {
+      view: function() {
+        return m('button', {
+          onclick: increment
+        },
+        count + 'clicks')
+      }
+    }
+    m.mount(root, add);
+  </script>
+</body>
+</html>
